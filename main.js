@@ -12,7 +12,9 @@ const zinesBasePrice = 10;
 const zinesCoefficient = 1.07;
 
 var bricks = 0;
-var bricksBasePrice = 40;
+var bricksBought = 0;
+const bricksBasePrice = 50;
+const bricksCoefficient = 1.14;
 
 var activists = 0;
 var activistsBasePrice = 10;
@@ -27,7 +29,7 @@ var riotsBasePrice = 10;
 window.ideologyRate = function ideologyRate() {
     let amount = 1;
     amount += zinesIdeologyRate();
-    amount += bricks*2;
+    amount += bricksIdeologyRate();
     return amount;
 }
 
@@ -38,6 +40,7 @@ window.ideologyRate = function ideologyRate() {
 function ideologyRateTooltip() {
     let tooltip = "1 from Societal Unrest.";
     tooltip += ("\n" + zinesIdeologyRate() + " from Zines.");
+    tooltip += ("\n" + bricksIdeologyRate() + " from Bricks.");
     return tooltip;
 }
 
@@ -99,6 +102,7 @@ function zinesBuy() {
     if(lockedPrice <= ideologyAmount) {
         updateZines(1,true)
         updateIdeology(-1*lockedPrice)
+        $("#buyZineButtonPrice").html(zinesPrice().toLocaleString("en-us"));
     }
 }
 
@@ -106,7 +110,7 @@ function zinesBuy() {
     Setter function for zines. All changes to a player's number of zines should be done through this function.
 
     Input: An amount to increase the player's zines, and whether the zines were bought (true) or generated (false).
-    Output: The player's ideology changing by an appropriate amount, and HTML being updated.
+    Output: The player's zines changing by an appropriate amount, and HTML being updated.
 */
 function updateZines(n,bought) {
     zines += n;
@@ -128,15 +132,52 @@ function zinesIdeologyRate() {
 }
 
 /*
+    Input: The base price of a brick, the coefficient for bricks, and the number of bricks bought.
+    Output: The current price of a brick.
+*/
+function bricksPrice(){
+    let amount = bricksBasePrice;
+    amount *= bricksCoefficient**bricksBought;
+    return Math.round(amount);
+}
+
+/*
     Input: None.
     Output: If the player has the appropriate amount of ideology, they buy a brick.
 */
 function bricksBuy() {
-    if(bricksPrice <= ideologyAmount) {
-        bricks++;
-        updateIdeology(-1*bricksPrice)
-        $("#bricksAmountElement").html(bricks.toLocaleString("en-us"));
+    let lockedPrice = bricksPrice(); // Ensure the price for calculations doesn't change in the middle of processing.
+
+    if(lockedPrice <= ideologyAmount) {
+        updateBricks(1,true)
+        updateIdeology(-1*lockedPrice)
+        $("#buyBrickButtonPrice").html(bricksPrice().toLocaleString("en-us"));
     }
+}
+
+/*
+    Setter function for bricks. All changes to a player's number of bricks should be done through this function.
+
+    Input: An amount to increase the player's bricks, and whether the bricks were bought (true) or generated (false).
+    Output: The player's bricks changing by an appropriate amount, and HTML being updated.
+*/
+function updateBricks(n,bought) {
+    bricks += n;
+    if(bought){
+        bricksBought += n;
+    }
+    $("#bricksAmountElement").html(bricks.toLocaleString("en-us"));
+    $("#bricksBoughtElement").html(bricksBought.toLocaleString("en-us"));
+    ideologyRateDisplay();
+}
+
+/*
+    Input: The total number of zines.
+    Output: How much all zines contribute to ideology per second in aggregate.
+*/
+function bricksIdeologyRate() {
+    amount = 4*bricks;
+    return amount;
 }
 
 /*
