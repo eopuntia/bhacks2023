@@ -41,3 +41,25 @@ button{
     margin-left: 10px;
     margin-right: 10px;
 }
+
+
+/* Tooltip Styling */
+
+.ui-helper-hidden-accessible {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+.ui-tooltip {
+    padding: 10px 20px;
+    width: 400px;
+    border-radius: 20px;
+    background: white;
+    border: 2px solid black;
+}

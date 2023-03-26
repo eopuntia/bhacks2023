@@ -341,14 +341,16 @@ class Upgrade {
     this.type = type;
     this.effect = effect;
     this.bought = false;
+    this.visible = false;
     }
 
-    buy() {
+    buy(i) {
         if(this.price <= ideologyAmount) {
             this.bought = true;
             updateIdeology(-1*this.price);
             ideologyRateDisplay();
             ideologyRateTooltip();
+            $("#btn_" + i).remove();
         }
     }
 }
@@ -361,18 +363,16 @@ upgrades.push(new Upgrade("Publicization","+1% Ideology from Zines for each Bric
 upgrades.push(new Upgrade("Enraged Radicalization","+1% Ideology from Bricks for each Zine",10000,5000,"brick",function(n){return n*(1+zines*0.01)}));
 
 function refreshTable(){
-    $("#upgradeSection").html("");
-
     for (let i = 0; i < upgrades.length; ++i) {
-        if(upgrades[i].minimum < bestIdeologyAmount && upgrades[i].bought == false){
+        if(upgrades[i].minimum < bestIdeologyAmount && upgrades[i].bought == false && upgrades[i].visible == false){
+            upgrades[i].visible = true;
             $('<button/>', {
                 text: upgrades[i].name,
                 id: 'btn_'+i,
                 title: upgrades[i].description,
-                click: function () { upgrades[i].buy(); }
+                click: function () { upgrades[i].buy(i); }
                 }).appendTo("#upgradeSection");
         }
-
     }
 }
 
@@ -396,6 +396,7 @@ $(document).ready(function() {
     $("#buyBrickButton").click(function(){bricksBuy()});
     ideologyRateDisplay();
     refreshTable();
+    $(document).tooltip({show: null})
 });
 
 /*
