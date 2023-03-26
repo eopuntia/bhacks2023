@@ -1,15 +1,26 @@
+/*
+          _______  _______ _________ _______  ______   _        _______  _______
+|\     /|(  ___  )(  ____ )\__   __/(  ___  )(  ___ \ ( \      (  ____ \(  ____ \
+| )   ( || (   ) || (    )|   ) (   | (   ) || (   ) )| (      | (    \/| (    \/
+| |   | || (___) || (____)|   | |   | (___) || (__/ / | |      | (__    | (_____
+( (   ) )|  ___  ||     __)   | |   |  ___  ||  __ (  | |      |  __)   (_____  )
+ \ \_/ / | (   ) || (\ (      | |   | (   ) || (  \ \ | |      | (            ) |
+  \   /  | )   ( || ) \ \_____) (___| )   ( || )___) )| (____/\| (____/\/\____) |
+   \_/   |/     \||/   \__/\_______/|/     \||/ \___/ (_______/(_______/\_______)
+*/
 
 const tickTime = 300; // in milliseconds.
 
 // initialize ideology
 var ideologyAmount = 0;
 var ideologyRate = 1;
+var bestIdeologyAmount = 0;
 
 // initialize generators
 var zines = 0;
 var zinesBought = 0;
 const zinesBasePrice = 10;
-const zinesCoefficient = 1.07;
+const zinesCoefficient = 1.15;
 
 var bricks = 0;
 var bricksBought = 0;
@@ -25,14 +36,38 @@ const riotsBricksBasePrice = 10;
 const riotsProtestBasePrice = 10;
 var figureheads = 0;
 
+// upgrade booleans
+var upgWeLiveInASociety = false;
+
+/*
+_________ ______   _______  _______  _        _______  _______
+\__   __/(  __  \ (  ____ \(  ___  )( \      (  ___  )(  ____ \|\     /|
+   ) (   | (  \  )| (    \/| (   ) || (      | (   ) || (    \/( \   / )
+   | |   | |   ) || (__    | |   | || |      | |   | || |       \ (_) /
+   | |   | |   | ||  __)   | |   | || |      | |   | || | ____   \   /
+   | |   | |   ) || (      | |   | || |      | |   | || | \_  )   ) (
+___) (___| (__/  )| (____/\| (___) || (____/\| (___) || (___) |   | |
+\_______/(______/ (_______/(_______)(_______/(_______)(_______)   \_/
+*/
+
 /*
     Input: The player's current generators and upgrades.
     Output: The amount to increase the player's ideology each tick.
 */
 window.ideologyRate = function ideologyRate() {
-    let amount = 1;
+    let amount = societalIdeologyRate();
     amount += zinesIdeologyRate();
     amount += bricksIdeologyRate();
+    return amount;
+}
+
+function societalIdeologyRate() {
+    let amount = 1;
+    for (const i of upgrades) {
+        if(i.type == "base" && i.bought == true){
+            amount = i.effect(amount);
+        }
+    }
     return amount;
 }
 
@@ -41,9 +76,9 @@ window.ideologyRate = function ideologyRate() {
     Output: A concatenated string containing information on how ideology is generated.
 */
 function ideologyRateTooltip() {
-    let tooltip = "1 from Societal Unrest.";
-    tooltip += ("\n" + zinesIdeologyRate() + " from Zines.");
-    tooltip += ("\n" + bricksIdeologyRate() + " from Bricks.");
+    let tooltip = societalIdeologyRate() + " from Societal Unrest.";
+    tooltip += "\n" + zinesIdeologyRate() + " from Zines.";
+    tooltip += "\n" + bricksIdeologyRate() + " from Bricks.";
     return tooltip;
 }
 
@@ -72,8 +107,23 @@ function ideologyTick() {
 */
 function updateIdeology(n) {
     ideologyAmount += n;
+    if(ideologyAmount > bestIdeologyAmount){
+        bestIdeologyAmount = ideologyAmount;
+    }
     $("#ideologyAmountElement").html(ideologyAmount.toLocaleString("en-us"));
 }
+
+/*
+  _____    _____    _____
+ / ___ \  / ___ \  / ___ \
+( (   ) )( (   ) )( (   ) )
+ \/  / /  \/  / /  \/  / /
+    ( (      ( (      ( (
+    | |      | |      | |
+    (_)      (_)      (_)
+     _        _        _
+    (_)      (_)      (_)
+*/
 
 // increment generators
 function zinesTick() {
@@ -84,6 +134,17 @@ function bricksTick() {
     bricks += riots;
     $("#bricksAmountElement").html(bricks.toLocaleString("en-us"));
 }
+
+/*
+ _______ _________ _        _______  _______
+/ ___   )\__   __/( (    /|(  ____ \(  ____ \
+\/   )  |   ) (   |  \  ( || (    \/| (    \/
+    /   )   | |   |   \ | || (__    | (_____
+   /   /    | |   | (\ \) ||  __)   (_____  )
+  /   /     | |   | | \   || (            ) |
+ /   (_/\___) (___| )  \  || (____/\/\____) |
+(_______/\_______/|/    )_)(_______/\_______)
+*/
 
 /*
     Input: The base price of a zine, the coefficient for zines, and the number of zines bought.
@@ -131,8 +192,24 @@ function updateZines(n,bought) {
 */
 function zinesIdeologyRate() {
     amount = 1*zines;
+    for (const i of upgrades) {
+            if(i.type == "zine" && i.bought == true){
+                amount = i.effect(amount);
+            }
+        }
     return amount;
 }
+
+/*
+ ______   _______ _________ _______  _        _______
+(  ___ \ (  ____ )\__   __/(  ____ \| \    /\(  ____ \
+| (   ) )| (    )|   ) (   | (    \/|  \  / /| (    \/
+| (__/ / | (____)|   | |   | |      |  (_/ / | (_____
+|  __ (  |     __)   | |   | |      |   _ (  (_____  )
+| (  \ \ | (\ (      | |   | |      |  ( \ \       ) |
+| )___) )| ) \ \_____) (___| (____/\|  /  \ \/\____) |
+|/ \___/ |/   \__/\_______/(_______/|_/    \/\_______)
+*/
 
 /*
     Input: The base price of a brick, the coefficient for bricks, and the number of bricks bought.
@@ -231,8 +308,68 @@ function updateBricks(n,bought) {
 */
 function bricksIdeologyRate() {
     amount = 4*bricks;
+    for (const i of upgrades) {
+            if(i.type == "brick" && i.bought == true){
+                amount = i.effect(amount);
+            }
+        }
     return amount;
 }
+
+/*
+          _______  _______  _______  _______  ______   _______  _______
+|\     /|(  ____ )(  ____ \(  ____ )(  ___  )(  __  \ (  ____ \(  ____ \
+| )   ( || (    )|| (    \/| (    )|| (   ) || (  \  )| (    \/| (    \/
+| |   | || (____)|| |      | (____)|| (___) || |   ) || (__    | (_____
+| |   | ||  _____)| | ____ |     __)|  ___  || |   | ||  __)   (_____  )
+| |   | || (      | | \_  )| (\ (   | (   ) || |   ) || (            ) |
+| (___) || )      | (___) || ) \ \__| )   ( || (__/  )| (____/\/\____) |
+(_______)|/       (_______)|/   \__/|/     \|(______/ (_______/\_______)
+*/
+
+var upgrades = [];
+
+class Upgrade {
+  constructor(name, description, price, minimum, type, effect) {
+    this.name = name;
+    this.description = description
+    this.price = price;
+    this.minimum = minimum;
+    this.type = type;
+    this.effect = effect;
+    this.bought = false;
+  }
+
+  buy() {
+        if(this.price <= ideologyAmount) {
+                this.bought = true;
+                updateIdeology(-1*this.price);
+            }
+  }
+}
+
+upgrades.push(new Upgrade("We Live in a Society","Gives 9 more Ideology per second from Societal Unrest.",100,30,"base",function(n){return n+9}));
+
+function refreshTable(){
+    for (let index = 0; index < upgrades.length; ++index) {
+        $('<button/>', {
+                    text: upgrades[i].name
+                    id: 'btn_'+i,
+                    click: function () { upgrades[i].buy(); }
+                });
+    }
+}
+
+/*
+ _______           _
+(  ____ )|\     /|( (    /|
+| (    )|| )   ( ||  \  ( |
+| (____)|| |   | ||   \ | |
+|     __)| |   | || (\ \) |
+| (\ (   | |   | || | \   |
+| ) \ \__| (___) || )  \  |
+|/   \__/(_______)|/    )_)
+*/
 
 /*
     Input: All DOM elements of the page being loaded.
