@@ -34,3 +34,10 @@ section {
     border-style: solid;
     border-color: #000000;
 }
+
+/* Button styling */
+button{
+    font-weight: bold;
+    margin-left: 10px;
+    margin-right: 10px;
+}
