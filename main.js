@@ -15,6 +15,7 @@ const tickTime = 300; // in milliseconds.
 var ideologyAmount = 0;
 var ideologyRate = 1;
 var bestIdeologyAmount = 0;
+var ideologyCarryover = 0;
 
 // initialize generators
 var zines = 0;
@@ -106,7 +107,9 @@ function ideologyTick() {
     Output: The player's ideology changing by an appropriate amount, and HTML being updated.
 */
 function updateIdeology(n) {
-    ideologyAmount += n;
+    let increaseAmount = ideologyCarryover + n;
+    ideologyCarryover = increaseAmount - Math.floor(increaseAmount);
+    ideologyAmount += Math.floor(increaseAmount);
     if(ideologyAmount > bestIdeologyAmount){
         bestIdeologyAmount = ideologyAmount;
     }
@@ -191,7 +194,7 @@ function updateZines(n,bought) {
     Output: How much all zines contribute to ideology per second in aggregate.
 */
 function zinesIdeologyRate() {
-    amount = 1*zines;
+    amount = 0.1*zines;
     for (const i of upgrades) {
             if(i.type == "zine" && i.bought == true){
                 amount = i.effect(amount);
@@ -332,7 +335,7 @@ var upgrades = [];
 class Upgrade {
     constructor(name, description, price, minimum, type, effect) {
     this.name = name;
-    this.description = description
+    this.description = "Cost: " + price + " Ideology. " + description
     this.price = price;
     this.minimum = minimum;
     this.type = type;
@@ -350,7 +353,12 @@ class Upgrade {
     }
 }
 
-upgrades.push(new Upgrade("We Live in a Society","Gives 9 more Ideology per second from Societal Unrest.",30,30,"base",function(n){return n+9}));
+upgrades.push(new Upgrade("We Live in a Society","Gives 9 more Ideology per second from Societal Unrest.",50,25,"base",function(n){return n+9}));
+upgrades.push(new Upgrade("Stain-Resistant Ink","+50% Ideology from Zines.",150,100,"zine",function(n){return n*1.5}));
+upgrades.push(new Upgrade("Advanced Graphic Design","+50% Ideology from Zines.",500,250,"zine",function(n){return n*1.5}));
+upgrades.push(new Upgrade("Bigger Bricks","+100% Ideology from Bricks.",1000,600,"brick",function(n){return n*2}));
+upgrades.push(new Upgrade("Publicization","+1% Ideology from Zines for each Brick",1500,900,"zine",function(n){return n*(1+bricks*0.01)}));
+upgrades.push(new Upgrade("Enraged Radicalization","+1% Ideology from Bricks for each Zine",10000,5000,"brick",function(n){return n*(1+zines*0.01)}));
 
 function refreshTable(){
     $("#upgradeSection").html("");
