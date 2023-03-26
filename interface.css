@@ -62,3 +62,17 @@ button{
     background: white;
     border: 2px solid black;
 }
+
+/* Format Ascii Art */
+.flexbox {
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.flex-child {
+    width:fit-content;
+}
+pre {
+    text-align: left;
+    width:fit-content;
+}
