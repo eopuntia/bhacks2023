@@ -21,15 +21,17 @@ var ideologyCarryover = 0;
 var zines = 0;
 var zinesBought = 0;
 const zinesBasePrice = 10;
-const zinesCoefficient = 1.15;
+const zinesCoefficient = 1.16;
 
 var bricks = 0;
 var bricksBought = 0;
 const bricksBasePrice = 50;
-const bricksCoefficient = 1.14;
+const bricksCoefficient = 1.12;
 
 var activists = 0;
-var activistsBasePrice = 10;
+var activistsBought = 0;
+const activistsBasePrice = 10000;
+const activistsCoefficient = 1.24;
 
 var riots = 0;
 var riotsHosted = 0;
@@ -117,25 +119,25 @@ function updateIdeology(n) {
 }
 
 /*
-  _____    _____    _____
- / ___ \  / ___ \  / ___ \
-( (   ) )( (   ) )( (   ) )
- \/  / /  \/  / /  \/  / /
-    ( (      ( (      ( (
-    | |      | |      | |
-    (_)      (_)      (_)
-     _        _        _
-    (_)      (_)      (_)
+ _______  _______  _        _______  _______  _______ __________________ _______  _
+(  ____ \(  ____ \( (    /|(  ____ \(  ____ )(  ___  )\__   __/\__   __/(  ___  )( (    /|
+| (    \/| (    \/|  \  ( || (    \/| (    )|| (   ) |   ) (      ) (   | (   ) ||  \  ( |
+| |      | (__    |   \ | || (__    | (____)|| (___) |   | |      | |   | |   | ||   \ | |
+| | ____ |  __)   | (\ \) ||  __)   |     __)|  ___  |   | |      | |   | |   | || (\ \) |
+| | \_  )| (      | | \   || (      | (\ (   | (   ) |   | |      | |   | |   | || | \   |
+| (___) || (____/\| )  \  || (____/\| ) \ \__| )   ( |   | |   ___) (___| (___) || )  \  |
+(_______)(_______/|/    )_)(_______/|/   \__/|/     \|   )_(   \_______/(_______)|/    )_)
 */
 
-// increment generators
 function zinesTick() {
     zines += activists;
     $("#zinesAmountElement").html(zines.toLocaleString("en-us"));
+    ideologyRateDisplay();
 }
 function bricksTick() {
     bricks += riots;
     $("#bricksAmountElement").html(bricks.toLocaleString("en-us"));
+    ideologyRateDisplay();
 }
 
 /*
@@ -238,6 +240,97 @@ function bricksBuy() {
     }
 }
 
+/*
+    Setter function for bricks. All changes to a player's number of bricks should be done through this function.
+
+    Input: An amount to increase the player's bricks, and whether the bricks were bought (true) or generated (false).
+    Output: The player's bricks changing by an appropriate amount, and HTML being updated.
+*/
+function updateBricks(n,bought) {
+    bricks += n;
+    if(bought){
+        bricksBought += n;
+    }
+    $("#bricksAmountElement").html(bricks.toLocaleString("en-us"));
+    $("#bricksBoughtElement").html(bricksBought.toLocaleString("en-us"));
+    ideologyRateDisplay();
+}
+
+/*
+    Input: The total number of bricks.
+    Output: How much all bricks contribute to ideology per second in aggregate.
+*/
+function bricksIdeologyRate() {
+    amount = 4*bricks;
+    for (const i of upgrades) {
+            if(i.type == "brick" && i.bought == true){
+                amount = i.effect(amount);
+            }
+        }
+    return amount;
+}
+
+/*
+ _______  _______ __________________         _________ _______ _________ _______
+(  ___  )(  ____ \\__   __/\__   __/|\     /|\__   __/(  ____ \\__   __/(  ____ \
+| (   ) || (    \/   ) (      ) (   | )   ( |   ) (   | (    \/   ) (   | (    \/
+| (___) || |         | |      | |   | |   | |   | |   | (_____    | |   | (_____
+|  ___  || |         | |      | |   ( (   ) )   | |   (_____  )   | |   (_____  )
+| (   ) || |         | |      | |    \ \_/ /    | |         ) |   | |         ) |
+| )   ( || (____/\   | |   ___) (___  \   /  ___) (___/\____) |   | |   /\____) |
+|/     \|(_______/   )_(   \_______/   \_/   \_______/\_______)   )_(   \_______)
+*/
+
+/*
+    Input: The base price of an activist, the coefficient for activists, and the number of activists bought.
+    Output: The current price of an activist.
+*/
+function activistsPrice(){
+    let amount = activistsBasePrice;
+    amount *= activistsCoefficient**activistsBought;
+    return Math.round(amount);
+}
+
+/*
+    Input: None.
+    Output: If the player has the appropriate amount of ideology, they buy an activist.
+*/
+function activistsBuy() {
+    let lockedPrice = activistsPrice(); // Ensure the price for calculations doesn't change in the middle of processing.
+
+    if(lockedPrice <= ideologyAmount) {
+        updateActivists(1,true)
+        updateIdeology(-1*lockedPrice)
+        $("#buyActivistButtonPrice").html(activistsPrice().toLocaleString("en-us"));
+    }
+}
+
+/*
+    Setter function for activists. All changes to a player's number of activists should be done through this function.
+
+    Input: An amount to increase the player's activists, and whether the activists were bought (true) or generated (false).
+    Output: The player's activists changing by an appropriate amount, and HTML being updated.
+*/
+function updateActivists(n,bought) {
+    activists += n;
+    if(bought){
+        activistsBought += n;
+    }
+    $("#activistsAmountElement").html(activists.toLocaleString("en-us"));
+    ideologyRateDisplay();
+}
+
+/*
+ _______ _________ _______ _________ _______
+(  ____ )\__   __/(  ___  )\__   __/(  ____ \
+| (    )|   ) (   | (   ) |   ) (   | (    \/
+| (____)|   | |   | |   | |   | |   | (_____
+|     __)   | |   | |   | |   | |   (_____  )
+| (\ (      | |   | |   | |   | |         ) |
+| ) \ \_____) (___| (___) |   | |   /\____) |
+|/   \__/\_______/(_______)   )_(   \_______)
+/*
+
 /* 
     Input: None
     Output: If the player has the appropriate amount of protests and bricks, they host a riot
@@ -290,36 +383,6 @@ function brickReset() {
 }
 
 /*
-    Setter function for bricks. All changes to a player's number of bricks should be done through this function.
-
-    Input: An amount to increase the player's bricks, and whether the bricks were bought (true) or generated (false).
-    Output: The player's bricks changing by an appropriate amount, and HTML being updated.
-*/
-function updateBricks(n,bought) {
-    bricks += n;
-    if(bought){
-        bricksBought += n;
-    }
-    $("#bricksAmountElement").html(bricks.toLocaleString("en-us"));
-    $("#bricksBoughtElement").html(bricksBought.toLocaleString("en-us"));
-    ideologyRateDisplay();
-}
-
-/*
-    Input: The total number of zines.
-    Output: How much all zines contribute to ideology per second in aggregate.
-*/
-function bricksIdeologyRate() {
-    amount = 4*bricks;
-    for (const i of upgrades) {
-            if(i.type == "brick" && i.bought == true){
-                amount = i.effect(amount);
-            }
-        }
-    return amount;
-}
-
-/*
           _______  _______  _______  _______  ______   _______  _______
 |\     /|(  ____ )(  ____ \(  ____ )(  ___  )(  __  \ (  ____ \(  ____ \
 | )   ( || (    )|| (    \/| (    )|| (   ) || (  \  )| (    \/| (    \/
@@ -355,12 +418,12 @@ class Upgrade {
     }
 }
 
-upgrades.push(new Upgrade("We Live in a Society","Gives 9 more Ideology per second from Societal Unrest.",50,25,"base",function(n){return n+9}));
+upgrades.push(new Upgrade("We Live in a Society","Gives 9 more Ideology per second from Societal Unrest.",10,10,"base",function(n){return n+1000}));
 upgrades.push(new Upgrade("Stain-Resistant Ink","+50% Ideology from Zines.",150,100,"zine",function(n){return n*1.5}));
 upgrades.push(new Upgrade("Advanced Graphic Design","+50% Ideology from Zines.",500,250,"zine",function(n){return n*1.5}));
 upgrades.push(new Upgrade("Bigger Bricks","+100% Ideology from Bricks.",1000,600,"brick",function(n){return n*2}));
-upgrades.push(new Upgrade("Publicization","+1% Ideology from Zines for each Brick",1500,900,"zine",function(n){return n*(1+bricks*0.01)}));
-upgrades.push(new Upgrade("Enraged Radicalization","+1% Ideology from Bricks for each Zine",10000,5000,"brick",function(n){return n*(1+zines*0.01)}));
+upgrades.push(new Upgrade("Publicization","+1% Ideology from Zines for each Brick.",1500,900,"zine",function(n){return n*(1+bricks*0.01)}));
+upgrades.push(new Upgrade("Enraged Radicalization","+1% Ideology from Bricks for each Zine.",10000,5000,"brick",function(n){return n*(1+zines*0.01)}));
 
 function refreshTable(){
     for (let i = 0; i < upgrades.length; ++i) {
@@ -394,6 +457,7 @@ function refreshTable(){
 $(document).ready(function() {
     $("#buyZineButton").click(function(){zinesBuy()});
     $("#buyBrickButton").click(function(){bricksBuy()});
+    $("#buyActivistButton").click(function(){activistsBuy()});
     ideologyRateDisplay();
     refreshTable();
     $(document).tooltip({show: null})

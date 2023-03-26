@@ -38,8 +38,7 @@ section {
 /* Button styling */
 button{
     font-weight: bold;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin: 3px 5px
 }
 
 
