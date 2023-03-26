@@ -1,11 +1,14 @@
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="interface.css" />
-    <script type="text/javascript" src="main.js"></script>
+
     <script src="http://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script type="text/javascript">
 	  window.jQuery || document.write('<script src="/jquery-3.6.4.js"><\/script>')
     </script>
+
+    <script type="text/javascript" src="main.js"></script>
+
     <title>Anarchist Insurrection: The Idle Game</title>
   </head>
 
@@ -17,12 +20,19 @@
       </h1>
       <!-- Current currency. -->
       <section>
-        <p>Ideology: <span id="currencyAmountElement">0</span></p>
+        <p>Ideology: <span id="ideologyAmountElement">0</span></p>
+      </section>
+
+      <!-- Current generators. -->
+      <section>
+        <p>Zines: <span id="zinesAmountElement">0</span></p>
+        <p>Bricks: <span id="bricksAmountElement">0</span></p>
       </section>
 
       <!-- Purchasing generators. -->
       <section>
-        <p>Here's where the player can purchase generators.</p>
+        <button id="buyZineButton">Buy Zine</button>
+        <button id="buyBrickButton">Buy Brick</button>
       </section>
 
       <!-- Purchasing upgrades. -->
