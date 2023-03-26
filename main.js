@@ -1,5 +1,5 @@
 
-const tickTime = 1000; // in milliseconds.
+const tickTime = 300; // in milliseconds.
 
 // initialize ideology
 var ideologyAmount = 0;
@@ -7,13 +7,18 @@ var ideologyRate = 1;
 
 // initialize generators
 var zines = 0;
-var zinesPrice = 10;
+var zinesBought = 0;
+const zinesBasePrice = 10;
+const zinesCoefficient = 1.07;
+
 var bricks = 0;
-var bricksPrice = 40;
+var bricksBasePrice = 40;
+
 var activists = 0;
-var activistsPrice = 10;
+var activistsBasePrice = 10;
+
 var riots = 0;
-var riotsPrice = 10;
+var riotsBasePrice = 10;
 
 /*
     Input: The player's current generators and upgrades.
@@ -56,15 +61,41 @@ function bricksTick() {
 }
 
 /*
+    Input: The base price of a zine, the coefficient for zines, and the number of zines bought.
+    Output: The current price of a zine.
+*/
+function zinesPrice(){
+    let amount = zinesBasePrice;
+    amount *= zinesCoefficient**zinesBought;
+    return Math.round(amount);
+}
+
+/*
     Input: None.
     Output: If the player has the appropriate amount of ideology, they buy a zine.
 */
 function zinesBuy() {
-    if(zinesPrice <= ideologyAmount) {
-        zines++;
-        updateIdeology(-1*zinesPrice)
-        $("#zinesAmountElement").html(zines);
+    let lockedPrice = zinesPrice(); // Ensure the price for calculations doesn't change in the middle of processing.
+
+    if(lockedPrice <= ideologyAmount) {
+        updateZines(1,true)
+        updateIdeology(-1*lockedPrice)
     }
+}
+
+/*
+    Setter function for zines. All changes to a player's number of zines should be done through this function.
+
+    Input: An amount to increase the player's zines, and whether the zines were bought (true) or generated (false).
+    Output: The player's ideology changing by an appropriate amount, and HTML being updated.
+*/
+function updateZines(n,bought) {
+    zines += n;
+    if(bought){
+        zinesBought += n;
+    }
+    $("#zinesAmountElement").html(zines);
+    $("#zinesBoughtElement").html(zinesBought);
 }
 
 /*
