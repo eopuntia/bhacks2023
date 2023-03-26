@@ -20,7 +20,10 @@ var activists = 0;
 var activistsBasePrice = 10;
 
 var riots = 0;
-var riotsBasePrice = 10;
+var riotsHosted = 0;
+const riotsBricksBasePrice = 10;
+const riotsProtestBasePrice = 10;
+var figureheads = 0;
 
 /*
     Input: The player's current generators and upgrades.
@@ -153,6 +156,57 @@ function bricksBuy() {
         updateIdeology(-1*lockedPrice)
         $("#buyBrickButtonPrice").html(bricksPrice().toLocaleString("en-us"));
     }
+}
+
+/* 
+    Input: None
+    Output: If the player has the appropriate amount of protests and bricks, they host a riot
+*/
+function riotBuy() {
+    if(bricks >= riotsBricksPrice && protests >= riotsProtestPrice) {
+        ideologyReset();
+        zineReset();
+        brickReset();
+        activistReset();
+
+        figureheads += figureheads*(riotsHosted + 1);
+    }
+}
+
+/* 
+    Input: None
+    Output: Resets ideology
+*/
+function ideologyReset() {
+    ideologyAmount = 0;
+    ideologyRate = 1;
+}
+
+/* 
+    Input: None
+    Output: Resets zines
+*/
+function zineReset() {
+    zines = 0;
+    zinesBought = 0;
+}
+
+/* 
+    Input: None
+    Output: Resets bricks
+*/
+function brickReset() {
+    bricks = 0;
+    bricksBought = 0;
+}
+
+/* 
+    Input: None
+    Output: Resets activists
+*/
+function brickReset() {
+    activists = 0;
+    activistsBought = 0;            // lmao buying activists
 }
 
 /*
