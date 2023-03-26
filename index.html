@@ -25,12 +25,11 @@
       <!-- Current generators. -->
       <section>
         <div class="flexbox">
-          <div class="flex-child" data="ascii/zines.txt">
+          <div class="flex-child">
             <pre>   ______
   //   //
  //   // 
-//___//  
-            </pre>
+//___//  </pre>
           </div>
           <div class="flex-child">
             <p>
@@ -41,15 +40,32 @@
         </div>
       </section>
       <section>
-        <p>Bricks: <span id="bricksAmountElement">0</span> (<span id="bricksBoughtElement">0</span>)</p>
-        <p>Activists: <span id="activistsAmountElement">0</span></p>
+        <div class="flexbox">
+          <div class="flex-child">
+            <pre>   [ ][ ]
+ [ ][ ][ ]
+[ ][ ][ ][ ]</pre>
+          </div>
+          <div class="flex-child">
+            <p>Bricks:  <span id="bricksAmountElement">0</span> (<span id="bricksBoughtElement">0</span>)</p>
+            <button id="buyBrickButton" title="Throwing a Brick generates 4 Ideology per second.">Buy Brick (<span id="buyBrickButtonPrice">50</span> Ideology)</button>
+          </div>
+        </div>
+      </section>
+      <section>
+        <div class="flexbox">
+          <div class="flex-child">
+            <pre> 0/
+/|
+/ \</pre>
+          </div>
+          <div class="flex-child">
+            <p>Activists: <span id="activistsAmountElement">0</span></p>
+            <button id="buyActivistButton" title="Recruiting an Activist generates 1 Zine per second.">Buy Activist (<span id="buyActivistButtonPrice">10000</span> Ideology)</button>
+          </div>
+        </div>
       </section>
 
-      <!-- Purchasing generators. -->
-      <section>
-        <button id="buyBrickButton" title="Throwing a Brick generates 4 Ideology per second.">Buy Brick (<span id="buyBrickButtonPrice">50</span> Ideology)</button>
-        <button id="buyActivistButton" title="Recruiting an Activist generates 1 Zine per second.">Buy Activist (<span id="buyActivistButtonPrice">10000</span> Ideology)</button>
-      </section>
 
       <!-- Purchasing upgrades. -->
       <section id="upgradeSection"></section>

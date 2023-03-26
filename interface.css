@@ -38,7 +38,6 @@ section {
 /* Button styling */
 button{
     font-weight: bold;
-    margin: 3px 5px
 }
 
 
@@ -68,6 +67,7 @@ button{
     display: inline-flex;
     justify-content: flex-start;
     align-items: center;
+    gap: 10px;
 }
 .flex-child {
     width:fit-content;
