@@ -11,13 +11,13 @@ function currencyTick() {
 
 // initialize generators
 var zines = 0;
-var zines.price = 10;
+var zinesPrice = 10;
 var bricks = 0;
-var bricks.price = 10;
+var bricksPrice = 10;
 var activists = 0;
-var activists.price = 10;
+var activistsPrice = 10;
 var riots = 0;
-var riots.price = 10;
+var riotsPrice = 10;
 
 // increment generators
 function zinesTick() {
@@ -31,13 +31,13 @@ function bricksTick() {
 
 // buy generators
 function zinesBuy() {
-    if(zines.price <= currencyAmount) {
+    if(zinesPrice <= currencyAmount) {
         zines++;
         $("#zinesAmountElement").html(zines);
     }
 }
 function bricksBuy() {
-    if(bricks.price <= currencyAmount) {
+    if(bricksPrice <= currencyAmount) {
         bricks++;
         $("#bricksAmountElement").html(bricks);
     }
