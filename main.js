@@ -96,7 +96,7 @@ function ideologyRateDisplay() {
     Output: The player's ideology incrementing by an appropriate amount for a single tick.
 */
 function ideologyTick() {
-    updateIdeology(ideologyRate())
+    updateIdeology(ideologyRate());
 }
 
 /*
@@ -330,7 +330,7 @@ function bricksIdeologyRate() {
 var upgrades = [];
 
 class Upgrade {
-  constructor(name, description, price, minimum, type, effect) {
+    constructor(name, description, price, minimum, type, effect) {
     this.name = name;
     this.description = description
     this.price = price;
@@ -338,25 +338,33 @@ class Upgrade {
     this.type = type;
     this.effect = effect;
     this.bought = false;
-  }
+    }
 
-  buy() {
+    buy() {
         if(this.price <= ideologyAmount) {
-                this.bought = true;
-                updateIdeology(-1*this.price);
-            }
-  }
+            this.bought = true;
+            updateIdeology(-1*this.price);
+            ideologyRateDisplay();
+            ideologyRateTooltip();
+        }
+    }
 }
 
-upgrades.push(new Upgrade("We Live in a Society","Gives 9 more Ideology per second from Societal Unrest.",100,30,"base",function(n){return n+9}));
+upgrades.push(new Upgrade("We Live in a Society","Gives 9 more Ideology per second from Societal Unrest.",30,30,"base",function(n){return n+9}));
 
 function refreshTable(){
-    for (let index = 0; index < upgrades.length; ++index) {
-        $('<button/>', {
-                    text: upgrades[i].name
-                    id: 'btn_'+i,
-                    click: function () { upgrades[i].buy(); }
-                });
+    $("#upgradeSection").html("");
+
+    for (let i = 0; i < upgrades.length; ++i) {
+        if(upgrades[i].minimum < bestIdeologyAmount && upgrades[i].bought == false){
+            $('<button/>', {
+                text: upgrades[i].name,
+                id: 'btn_'+i,
+                title: upgrades[i].description,
+                click: function () { upgrades[i].buy(); }
+                }).appendTo("#upgradeSection");
+        }
+
     }
 }
 
@@ -379,6 +387,7 @@ $(document).ready(function() {
     $("#buyZineButton").click(function(){zinesBuy()});
     $("#buyBrickButton").click(function(){bricksBuy()});
     ideologyRateDisplay();
+    refreshTable();
 });
 
 /*
@@ -389,5 +398,6 @@ window.setInterval(function(){
     ideologyTick();
     zinesTick();
     bricksTick();
+    refreshTable();
 },tickTime)
 
