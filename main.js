@@ -1,8 +1,9 @@
 
 let currencyAmount = 0;
+let currencyRate = 1;
 
 function currencyTick() {
-    currencyAmount++;
+    currencyAmount += currencyRate;
     $("#currencyAmountElement").html(currencyAmount);
 }
 
