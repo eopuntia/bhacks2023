@@ -12,5 +12,5 @@ function currencyTick() {
 }
 
 window.setInterval(function(){
-    ideologyTick();
+    currencyTick();
 },1000)
