@@ -26,9 +26,28 @@ var riotsBasePrice = 10;
 */
 window.ideologyRate = function ideologyRate() {
     let amount = 1;
-    amount += zines;
+    amount += zinesIdeologyRate();
     amount += bricks*2;
     return amount;
+}
+
+/*
+    Input: Ideology per second from various generators.
+    Output: A concatenated string containing information on how ideology is generated.
+*/
+function ideologyRateTooltip() {
+    let tooltip = "1 from Societal Unrest.";
+    tooltip += ("\n" + zinesIdeologyRate() + " from Zines.");
+    return tooltip;
+}
+
+/*
+    Input: The current ideology per second, and a tooltip containing information on how ideology is generated.
+    Output: Appropriately updated HTML.
+*/
+function ideologyRateDisplay() {
+    $("#ideologyRateElement").html(ideologyRate());
+    $("#ideologyRateElement").attr("title", ideologyRateTooltip());
 }
 
 /*
@@ -96,6 +115,16 @@ function updateZines(n,bought) {
     }
     $("#zinesAmountElement").html(zines.toLocaleString("en-us"));
     $("#zinesBoughtElement").html(zinesBought.toLocaleString("en-us"));
+    ideologyRateDisplay();
+}
+
+/*
+    Input: The total number of zines.
+    Output: How much all zines contribute to ideology per second in aggregate.
+*/
+function zinesIdeologyRate() {
+    amount = 1*zines;
+    return amount;
 }
 
 /*
@@ -117,6 +146,7 @@ function bricksBuy() {
 $(document).ready(function() {
     $("#buyZineButton").click(function(){zinesBuy()});
     $("#buyBrickButton").click(function(){bricksBuy()});
+    ideologyRateDisplay();
 });
 
 /*
