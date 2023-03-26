@@ -21,6 +21,7 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
     font-weight: normal;
 }
 
+
 /* Container styling */
 
 main {
@@ -38,6 +39,10 @@ section {
 /* Button styling */
 button{
     font-weight: bold;
+    padding: 2px;
+    background-color: white;
+    border: 2px solid black;
+    margin-right: 5px;
 }
 
 
