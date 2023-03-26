@@ -1,3 +1,7 @@
 # hackathon2023
 
-Baby's first incremental game!
+Anarachist Insurrection: The Idle Game
+
+Created by Sebastian Smiley and Estlin Mendez for Bronco Hacks 2023
+
+
