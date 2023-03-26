@@ -47,17 +47,17 @@ function ideologyTick() {
 */
 function updateIdeology(n) {
     ideologyAmount += n;
-    $("#ideologyAmountElement").html(ideologyAmount);
+    $("#ideologyAmountElement").html(ideologyAmount.toLocaleString("en-us"));
 }
 
 // increment generators
 function zinesTick() {
     zines += activists;
-    $("#zinesAmountElement").html(zines);
+    $("#zinesAmountElement").html(zines.toLocaleString("en-us"));
 }
 function bricksTick() {
     bricks += riots;
-    $("#bricksAmountElement").html(bricks);
+    $("#bricksAmountElement").html(bricks.toLocaleString("en-us"));
 }
 
 /*
@@ -94,8 +94,8 @@ function updateZines(n,bought) {
     if(bought){
         zinesBought += n;
     }
-    $("#zinesAmountElement").html(zines);
-    $("#zinesBoughtElement").html(zinesBought);
+    $("#zinesAmountElement").html(zines.toLocaleString("en-us"));
+    $("#zinesBoughtElement").html(zinesBought.toLocaleString("en-us"));
 }
 
 /*
@@ -106,7 +106,7 @@ function bricksBuy() {
     if(bricksPrice <= ideologyAmount) {
         bricks++;
         updateIdeology(-1*bricksPrice)
-        $("#bricksAmountElement").html(bricks);
+        $("#bricksAmountElement").html(bricks.toLocaleString("en-us"));
     }
 }
 
