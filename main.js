@@ -90,7 +90,7 @@ function ideologyRateTooltip() {
     Output: Appropriately updated HTML.
 */
 function ideologyRateDisplay() {
-    $("#ideologyRateElement").html(ideologyRate());
+    $("#ideologyRateElement").html(ideologyRate().toLocaleString("en-us", { maximumFractionDigits: 2}));
     $("#ideologyRateElement").attr("title", ideologyRateTooltip());
 }
 
