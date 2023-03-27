@@ -9,7 +9,7 @@
    \_/   |/     \||/   \__/\_______/|/     \||/ \___/ (_______/(_______/\_______)
 */
 
-const tickTime = 100; // in milliseconds.
+const tickTime = 500; // in milliseconds.
 
 // initialize ideology
 var ideologyAmount = 0;
@@ -399,7 +399,7 @@ var upgrades = [];
 class Upgrade {
     constructor(name, description, price, minimum, type, effect) {
     this.name = name;
-    this.description = "Cost: " + price + " Ideology. " + description
+    this.description = "Cost: " + price.toLocaleString("en-us") + " Ideology. " + description
     this.price = price;
     this.minimum = minimum;
     this.type = type;
