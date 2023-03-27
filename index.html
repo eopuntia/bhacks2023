@@ -12,64 +12,68 @@
 
   <body>
     <main>
+      <div id="game">
+        <h1>
+          Anarchist Insurrection: The Idle Game
+        </h1>
+        <!-- Current currency. -->
+        <section>
+          <p>Ideology: <span id="ideologyAmountElement">0</span></p>
+          <p>Ideology per Second: <span id="ideologyRateElement">0</span></p>
+        </section>
 
-      <h1>
-        Anarchist Insurrection: The Idle Game
-      </h1>
-      <!-- Current currency. -->
-      <section>
-        <p>Ideology: <span id="ideologyAmountElement">0</span></p>
-        <p>Ideology per Second: <span id="ideologyRateElement">0</span></p>
-      </section>
-
-      <!-- Current generators. -->
-      <section>
-        <div class="flexbox">
-          <div class="flex-child">
-            <pre>   ______
-  //   //
- //   // 
-//___//  </pre>
+        <!-- Current generators. -->
+        <section>
+          <div class="flexbox">
+            <div class="flex-child">
+              <pre>   ______
+    //   //
+  //   // 
+  //___//  </pre>
+            </div>
+            <div class="flex-child">
+              <p>
+                Zines: <span id="zinesAmountElement">0</span> (<span id="zinesBoughtElement">0</span>)
+              </p>
+              <button id="buyZineButton" title="Distributing a Zine generates 0.1 Ideology per second.">Buy Zine (<span id="buyZineButtonPrice">10</span> Ideology)</button>
+            </div>
           </div>
-          <div class="flex-child">
-            <p>
-              Zines: <span id="zinesAmountElement">0</span> (<span id="zinesBoughtElement">0</span>)
-            </p>
-            <button id="buyZineButton" title="Distributing a Zine generates 0.1 Ideology per second.">Buy Zine (<span id="buyZineButtonPrice">10</span> Ideology)</button>
+        </section>
+        <section>
+          <div class="flexbox">
+            <div class="flex-child">
+              <pre>   [ ][ ]
+  [ ][ ][ ]
+  [ ][ ][ ][ ]</pre>
+            </div>
+            <div class="flex-child">
+              <p>Bricks:  <span id="bricksAmountElement">0</span> (<span id="bricksBoughtElement">0</span>)</p>
+              <button id="buyBrickButton" title="Throwing a Brick generates 4 Ideology per second.">Buy Brick (<span id="buyBrickButtonPrice">50</span> Ideology)</button>
+            </div>
           </div>
-        </div>
-      </section>
-      <section>
-        <div class="flexbox">
-          <div class="flex-child">
-            <pre>   [ ][ ]
- [ ][ ][ ]
-[ ][ ][ ][ ]</pre>
-          </div>
-          <div class="flex-child">
-            <p>Bricks:  <span id="bricksAmountElement">0</span> (<span id="bricksBoughtElement">0</span>)</p>
-            <button id="buyBrickButton" title="Throwing a Brick generates 4 Ideology per second.">Buy Brick (<span id="buyBrickButtonPrice">50</span> Ideology)</button>
-          </div>
-        </div>
-      </section>
-      <section>
-        <div class="flexbox">
-          <div class="flex-child">
-            <pre> 0/
+        </section>
+        <section>
+          <div class="flexbox">
+            <div class="flex-child">
+              <pre> 0/
 /|
 / \</pre>
+            </div>
+            <div class="flex-child">
+              <p>Activists: <span id="activistsAmountElement">0</span></p>
+              <button id="buyActivistButton" title="Recruiting an Activist generates 1 Zine per second.">Buy Activist (<span id="buyActivistButtonPrice">10000</span> Ideology)</button>
+            </div>
           </div>
-          <div class="flex-child">
-            <p>Activists: <span id="activistsAmountElement">0</span></p>
-            <button id="buyActivistButton" title="Recruiting an Activist generates 1 Zine per second.">Buy Activist (<span id="buyActivistButtonPrice">10000</span> Ideology)</button>
-          </div>
-        </div>
-      </section>
+        </section>
 
 
-      <!-- Purchasing upgrades. -->
-      <section id="upgradeSection"></section>
-
+        <!-- Purchasing upgrades. -->
+        <section id="upgradeSection"></section>
+      </div>
+      <div id="endgame">
+        <p>Congratulations, you have become powerful enough to guilltoine the rich!</p>
+        <object data="ascii/guillotine.txt"></object>
+      </div>
     </main>
   </body>
   

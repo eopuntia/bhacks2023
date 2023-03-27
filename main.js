@@ -16,6 +16,7 @@ var ideologyAmount = 0;
 var ideologyRate = 1;
 var bestIdeologyAmount = 0;
 var ideologyCarryover = 0;
+const ideologyWin = 100000;
 
 // initialize generators
 var zines = 0;
@@ -461,6 +462,7 @@ $(document).ready(function() {
     ideologyRateDisplay();
     refreshTable();
     $(document).tooltip({show: null})
+    $("#endgame").hide();
 });
 
 /*
@@ -472,5 +474,28 @@ window.setInterval(function(){
     zinesTick();
     bricksTick();
     refreshTable();
+    checkWin();
 },tickTime)
 
+/*  
+ _______  _        ______     _______  _______  _______  _______ 
+(  ____ \( (    /|(  __  \   (  ____ \(  ___  )(       )(  ____ \
+| (    \/|  \  ( || (  \  )  | (    \/| (   ) || () () || (    \/
+| (__    |   \ | || |   ) |  | |      | (___) || || || || (__    
+|  __)   | (\ \) || |   | |  | | ____ |  ___  || |(_)| ||  __)   
+| (      | | \   || |   ) |  | | \_  )| (   ) || |   | || (      
+| (____/\| )  \  || (__/  )  | (___) || )   ( || )   ( || (____/\
+(_______/|/    )_)(______/   (_______)|/     \||/     \|(_______/
+                                                    
+*/
+
+function checkWin(){
+    if(ideologyAmount >= ideologyWin) {
+        $("#game").fadeOut(2000, "linear", function() {
+            $("#endgame").fadeIn(2000, "linear");
+        });
+        //$.when(myEvent()).done($("#endgame").fadeIn(3000, "linear"));
+        //$("#endgame").fadeIn(3000, "linear");
+        
+    }
+}

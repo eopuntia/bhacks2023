@@ -81,3 +81,13 @@ pre {
     text-align: left;
     width:fit-content;
 }
+object {
+    height:100%;
+    margin: 0 auto;
+    width: 140px;
+    display: block;
+}
+#endgame {
+    width: fit-content;
+    margin: 0 auto;
+}
