@@ -9,7 +9,7 @@
    \_/   |/     \||/   \__/\_______/|/     \||/ \___/ (_______/(_______/\_______)
 */
 
-const tickTime = 1000; // in milliseconds.
+const tickTime = 100; // in milliseconds.
 
 // initialize ideology
 var ideologyAmount = 0;
@@ -460,7 +460,11 @@ function refreshTable(){
                 title: upgrades[i].description,
                 click: function () { upgrades[i].buy(i); }
                 }).appendTo("#upgradeSection");
+            $("#upgradeSection").show()
         }
+    }
+    if ($("#upgradeSection").is(":empty")){
+      $("#upgradeSection").hide()
     }
 }
 
@@ -487,6 +491,7 @@ $(document).ready(function() {
     refreshTable();
     $(document).tooltip({show: {delay: 150}})
     $("#endgame").hide();
+    $("#upgradeSection").hide()
 });
 
 /*
