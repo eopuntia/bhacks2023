@@ -9,14 +9,13 @@
    \_/   |/     \||/   \__/\_______/|/     \||/ \___/ (_______/(_______/\_______)
 */
 
-const tickTime = 300; // in milliseconds.
+const tickTime = 1000; // in milliseconds.
 
 // initialize ideology
 var ideologyAmount = 0;
-var ideologyRate = 1;
 var bestIdeologyAmount = 0;
 var ideologyCarryover = 0;
-const ideologyWin = 100000;
+const ideologyWin = 1000000;
 
 // initialize generators
 var zines = 0;
@@ -26,7 +25,7 @@ const zinesCoefficient = 1.16;
 
 var bricks = 0;
 var bricksBought = 0;
-const bricksBasePrice = 50;
+const bricksBasePrice = 150;
 const bricksCoefficient = 1.12;
 
 var activists = 0;
@@ -117,6 +116,7 @@ function updateIdeology(n) {
         bestIdeologyAmount = ideologyAmount;
     }
     $("#ideologyAmountElement").html(ideologyAmount.toLocaleString("en-us"));
+    $("#ideologyAmountElement").attr("title", "Highest Banked Ideology: " + bestIdeologyAmount.toLocaleString("en-us"));
 }
 
 /*
@@ -419,12 +419,36 @@ class Upgrade {
     }
 }
 
-upgrades.push(new Upgrade("We Live in a Society","Gives 9 more Ideology per second from Societal Unrest.",10,10,"base",function(n){return n+1000}));
-upgrades.push(new Upgrade("Stain-Resistant Ink","+50% Ideology from Zines.",150,100,"zine",function(n){return n*1.5}));
-upgrades.push(new Upgrade("Advanced Graphic Design","+50% Ideology from Zines.",500,250,"zine",function(n){return n*1.5}));
-upgrades.push(new Upgrade("Bigger Bricks","+100% Ideology from Bricks.",1000,600,"brick",function(n){return n*2}));
-upgrades.push(new Upgrade("Publicization","+1% Ideology from Zines for each Brick.",1500,900,"zine",function(n){return n*(1+bricks*0.01)}));
-upgrades.push(new Upgrade("Enraged Radicalization","+1% Ideology from Bricks for each Zine.",10000,5000,"brick",function(n){return n*(1+zines*0.01)}));
+upgrades.push(new Upgrade("We Live in a Society","Gain 2 more Ideology per second from Societal Unrest.",200,100,"base",function(n){return n+2}));
+upgrades.push(new Upgrade("Rise Up","Gain 3 more Ideology per second from Societal Unrest.",600,300,"base",function(n){return n+3}));
+upgrades.push(new Upgrade("Vive la Révolution","Gain 4 more Ideology per second from Societal Unrest.",2000,1000,"base",function(n){return n+4}));
+
+upgrades.push(new Upgrade("Secure Bindings","+20% Ideology from Zines.",15,15,"zine",function(n){return n*1.2}));
+upgrades.push(new Upgrade("Glossy Colors","+20% Ideology from Zines.",30,25,"zine",function(n){return n*1.2}));
+upgrades.push(new Upgrade("Stain-Resistant Ink","+20% Ideology from Zines.",100,50,"zine",function(n){return n*1.2}));
+upgrades.push(new Upgrade("Advanced Graphic Design","+20% Ideology from Zines.",800,120,"zine",function(n){return n*1.2}));
+upgrades.push(new Upgrade("Local Distributors","+25% Ideology from Zines.",6400,1000,"zine",function(n){return n*1.25}));
+
+upgrades.push(new Upgrade("Impassioned Authorship","+100% Ideology from Zines while setting a new record for banked Ideology.",2000,2000,"zine",function(n){return ideologyAmount == bestIdeologyAmount ? n*2 : n}));
+upgrades.push(new Upgrade("Peaceful Politics","+100% Ideology from Zines while you have more Zines than Bricks.",2000,2000,"zine",function(n){return zines > bricks ? n*2 : n}));
+upgrades.push(new Upgrade("Will of the People","+100% Ideology from Zines while you have an even number of Zines.",2000,2000,"zine",function(n){return zines%2 == 0 ? n*2 : n}));
+
+upgrades.push(new Upgrade("Political Strategy","+100% Ideology from Zines while you have more Zines than Ideology.",20000,20000,"zine",function(n){return zines > ideologyAmount ? n*2 : n}));
+upgrades.push(new Upgrade("Unyielding Determination","+100% Ideology from Zines while the number of Zines you have ends in 0.",20000,20000,"zine",function(n){return zines%10 == 0 ? n*2 : n}));
+
+upgrades.push(new Upgrade("Bigger Bricks","+30% Ideology from Bricks.",1000,600,"brick",function(n){return n*1.3}));
+upgrades.push(new Upgrade("Throwing Arm","+30% Ideology from Bricks.",3000,900,"brick",function(n){return n*1.3}));
+upgrades.push(new Upgrade("Local Manufacturers","+35% Ideology from Bricks.",6000,4000,"brick",function(n){return n*1.35}));
+upgrades.push(new Upgrade("Targeted Protest","+30% Ideology from Bricks.",9000,5000,"brick",function(n){return n*1.3}));
+upgrades.push(new Upgrade("Even Bigger Bricks","+30% Ideology from Bricks.",12000,8000,"brick",function(n){return n*1.3}));
+
+upgrades.push(new Upgrade("Trained Writers","+1% Ideology from Zines for each Activist.",20000,10000,"zine",function(n){return n*(1+activists*0.01)}));
+upgrades.push(new Upgrade("Trained Protestors","+1% Ideology from Bricks for each Activist.",30000,15000,"brick",function(n){return n*(1+activists*0.01)}));
+
+upgrades.push(new Upgrade("Cross-Promotion","+1% Ideology from Zines for each Zine.",10000,10000,"zine",function(n){return n*(1+zines*0.01)}));
+
+upgrades.push(new Upgrade("Publicization","+1% Ideology from Zines for each Brick.",40000,40000,"zine",function(n){return n*(1+bricks*0.01)}));
+upgrades.push(new Upgrade("Enraged Radicalization","+1% Ideology from Bricks for each Zine.",40000,40000,"brick",function(n){return n*(1+zines*0.01)}));
 
 function refreshTable(){
     for (let i = 0; i < upgrades.length; ++i) {
@@ -461,7 +485,7 @@ $(document).ready(function() {
     $("#buyActivistButton").click(function(){activistsBuy()});
     ideologyRateDisplay();
     refreshTable();
-    $(document).tooltip({show: null})
+    $(document).tooltip({show: {delay: 150}})
     $("#endgame").hide();
 });
 
